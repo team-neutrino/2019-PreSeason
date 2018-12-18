@@ -1,13 +1,14 @@
 package auton;
 
+import java.awt.BasicStroke;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.awt.image.ImageObserver;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -26,7 +27,7 @@ import javax.swing.JOptionPane;
  * @author JoelNeppel
  *
  */
-public class DrawPath extends JComponent implements MouseListener, ActionListener, ImageObserver
+public class DrawPath extends JComponent implements MouseListener, ActionListener
 {
 	/**
 	 * The multiplier to convert pixels to inches
@@ -88,7 +89,7 @@ public class DrawPath extends JComponent implements MouseListener, ActionListene
 	}
 
 	/**
-	 * Initializes all the needed components to make a path.
+	 * Initializes all the needed components to make the graphics and path.
 	 */
 	private void setUp()
 	{
@@ -118,7 +119,10 @@ public class DrawPath extends JComponent implements MouseListener, ActionListene
 				{
 					new JButton("Finished"),
 					new JButton("Undo"),
-					new JButton("Line")
+					new JButton("Line"),
+					new JButton("Turn"),
+					new JButton("Spline"),
+					new JButton("Ultrasonic")
 				};
 			
 		int x = 0;
@@ -126,6 +130,8 @@ public class DrawPath extends JComponent implements MouseListener, ActionListene
 		int width = 100;
 		int height = 50;
 		
+		//Does all button set up including setting the String 
+		//command it sends when pushed and adding it to the window.
 		for(JButton button : buttons)
 		{
 			button.addActionListener(this);
@@ -146,6 +152,9 @@ public class DrawPath extends JComponent implements MouseListener, ActionListene
 	public void paintComponent(Graphics g)
 	{
 		g.drawImage(field, 0, 0, null);
+		
+		Graphics2D g2d = (Graphics2D) g;
+		g2d.setStroke(new BasicStroke(3));
 		
 		for(PathPart p : path)
 		{
@@ -235,14 +244,28 @@ public class DrawPath extends JComponent implements MouseListener, ActionListene
 						break;
 						
 					case "Line" :
-						Point start = path.get(path.size() - 1).getLastPoint();
+						Point startLine = path.get(path.size() - 1).getLastPoint();
 						
-						if(start == null)
-						{
-							throw new NullPointerException();
-						}
+						path.add(new Line(startLine));
+						break;
 						
-						path.add(new Line(start));
+					case "Turn" :
+						Point startTurn = path.get(path.size() - 1).getPoints()[0];
+						Point centerTurn = path.get(path.size() - 1).getLastPoint();
+						
+						path.add(new Turn(startTurn, centerTurn));
+						break;
+						
+					case "Spline" :
+						Point startSpline = path.get((path.size() - 1)).getLastPoint();
+						
+						path.add(new Spline(startSpline));
+						break;
+						
+					case "Ultrasonic" :
+						Point startUltra = path.get((path.size() - 1)).getLastPoint();
+						
+						path.add(new Ultrasonic(startUltra));
 						break;
 				}
 			}
@@ -263,45 +286,36 @@ public class DrawPath extends JComponent implements MouseListener, ActionListene
 	@Override
 	public void mouseClicked(MouseEvent e) 
 	{
-		if(path.size() == 0) // Adds start point if there isn't one
+		if(e.getX() < field.getWidth(null) && e.getY() < field.getHeight(null))
 		{
-			path.add(new Start(e.getPoint()));
-		}
-		else // Adds point to any part that needs a point
-		{
-			for(int arrPos = 0; arrPos < path.size(); arrPos++)
+			if(path.size() == 0) // Adds start point if there isn't one
 			{
-				if(path.get(arrPos).searchingForPoints())
+				path.add(new Start(e.getPoint()));
+			}
+			else // Adds point to any path  part that needs a point
+			{
+				for(int arrPos = 0; arrPos < path.size(); arrPos++)
 				{
-					path.get(arrPos).addPoint(e.getPoint());
+					if(path.get(arrPos).searchingForPoints())
+					{
+						path.get(arrPos).addPoint(e.getPoint());
+					}
 				}
 			}
+			
+			window.repaint();
 		}
-		
-		window.repaint();
 	}
 
 	@Override
-	public void mousePressed(MouseEvent e) 
-	{
-		
-	}
+	public void mousePressed(MouseEvent e) {}
 
 	@Override
-	public void mouseReleased(MouseEvent e) 
-	{
-		
-	}
+	public void mouseReleased(MouseEvent e) {}
 
 	@Override
-	public void mouseEntered(MouseEvent e) 
-	{
-		
-	}
-
+	public void mouseEntered(MouseEvent e) {}
+	
 	@Override
-	public void mouseExited(MouseEvent e) 
-	{
-
-	}
+	public void mouseExited(MouseEvent e) {}
 }

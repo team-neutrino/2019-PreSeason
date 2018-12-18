@@ -134,7 +134,7 @@ public abstract class PathPart
 			{
 				if(point != null)
 				{
-					g.fillOval(point.x - 5, point.y - 5, 10, 10);
+					g.fillOval(point.x - 6, point.y - 6, 12, 12);
 				}
 			}
 		}

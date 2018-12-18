@@ -6,7 +6,7 @@ import java.awt.Point;
 
 /**
  * Start point class that contains a single point for where the robot will
- * start at the beginning of a match. 
+ * be at the beginning of a match. 
  * 
  * @author JoelNeppel
  *
@@ -31,8 +31,8 @@ public class Start extends PathPart
 	}
 
 	@Override
-	public void drawFinished(Graphics g, Point[] p) 
+	protected void drawFinished(Graphics g, Point[] p) 
 	{
-		g.fillOval(p[0].x - 5, p[0].y - 5, 10, 10);
+		g.fillOval(p[0].x - 6, p[0].y - 6, 12, 12);
 	}
 }
