@@ -26,8 +26,19 @@ public abstract class PathPart
 	private Color color;
 	
 	/**
+	 * The index where the previous path part connects to
+	 */
+	private int startConnection;
+	
+	/**
+	 * The index that the next path part will connect to
+	 */
+	private int endConnection;
+	
+	/**
 	 * Constructor for a path part that uses the number of points
-	 * to set the size of the array.
+	 * to set the size of the array. The start and end connection 
+	 * indexes are default at 0 and the last index
 	 * @param numPoints
 	 * 	The number of points the path part will use
 	 * @param color
@@ -37,6 +48,29 @@ public abstract class PathPart
 	{
 		points = new Point[numPoints];
 		this.color = color;
+		startConnection = 0;
+		endConnection = points.length - 1;
+	}
+	
+	/**
+	 * Constructor for a path part that uses the number of points
+	 * to set the size of the array. The start and end connection 
+	 * indexes are the given values.
+	 * @param numPoints
+	 * 	The number of points in the array
+	 * @param color
+	 * 	The color to draw the path part
+	 * @param startConnection
+	 * 	The index for the point that connects this path part to the previous
+	 * @param endConnection
+	 * 	The index for the point that connects this path part to the next
+	 */
+	protected PathPart(int numPoints, Color color, int startConnection, int endConnection)
+	{
+		points = new Point[numPoints];
+		this.color = color;
+		this.startConnection = startConnection;
+		this.endConnection = endConnection;
 	}
 	
 	/**
@@ -47,7 +81,15 @@ public abstract class PathPart
 	 */
 	public boolean searchingForPoints()
 	{
-		return points[points.length - 1] == null;
+		for(Point p : points)
+		{
+			if(p == null)
+			{
+				return true;
+			}
+		}
+		
+		return false;
 	}
 	
 	/**
@@ -57,6 +99,13 @@ public abstract class PathPart
 	 */
 	public void addPoint(Point point)
 	{
+		//Won't allow user to add a null point
+		if(point == null)
+		{
+			throw new NullPointerException("Given point cannot be null,"
+					+ " try finishing the previous path part.");
+		}
+		
 		for(int arrPos = 0; arrPos < points.length; arrPos++)
 		{
 			if(points[arrPos] == null)
@@ -81,17 +130,69 @@ public abstract class PathPart
 			if(points[arrPos] != null)
 			{
 				points[arrPos] = null;
-				
-				if(points[0] == null)
+				return shouldRemove();
+			}
+		}
+		
+		return shouldRemove();
+	}
+	
+	/**
+	 * Removes the specified point.
+	 * @param p
+	 * 	The point to be removed
+	 */
+	public boolean removePoint(Point p)
+	{
+		for(int arrPos = 0; arrPos < points.length; arrPos++)
+		{
+			if(points[arrPos] != null)
+			{
+				if(points[arrPos].equals(p))
 				{
-					return true;
+					points[arrPos] = null;
 				}
-				
+			}
+		}
+		
+		return shouldRemove();
+	}
+	
+	/**
+	 * Returns true if there are no points in the path part and 
+	 * should be removed, false if there is at least 1 point
+	 * @return
+	 * 	True if the path part should be removed, false if not
+	 */
+	private boolean shouldRemove()
+	{
+		for(Point p : points)
+		{
+			if(p != null)
+			{
 				return false;
 			}
 		}
 		
 		return true;
+	}
+	
+	/**
+	 * Returns the last point in the array that is not null.
+	 * @return
+	 * 	The closest non-null point to the end
+	 */
+	public Point getMostRecent()
+	{
+		for(int arrPos = points.length - 1; arrPos >= 0; arrPos--)
+		{
+			if(points[arrPos] != null)
+			{
+				return points[arrPos];
+			}
+		}
+		
+		return null;
 	}
 	
 	/**
@@ -105,13 +206,43 @@ public abstract class PathPart
 	}
 	
 	/**
-	 * Returns the last point in the array, possible null.
+	 * Returns the index of the point that connects this path part to the previous.
 	 * @return
-	 * 	The last point, possibly null
+	 * 	The index of the point that connects this path part to the previous
 	 */
-	public Point getLastPoint()
+	public int connectStart()
 	{
-		return points[points.length - 1];
+		return startConnection ;
+	}
+	
+	/**
+	 * Returns the index that connects this path part to the next
+	 * @return
+	 * 	The index of the point that connects this path part to the next
+	 */
+	public int connectEnd()
+	{
+		return endConnection;
+	}
+	
+	/**
+	 * Returns the point that connects this path part to the previous.
+	 * @return
+	 * 	The point that connects this path part to the previous
+	 */
+	public Point getStartPoint()
+	{
+		return points[startConnection];
+	}
+	
+	/**
+	 * Returns the point that connects this path part to the next.
+	 * @return
+	 * 	The point that connects this path part to the next
+	 */
+	public Point getEndPoint()
+	{
+		return points[endConnection];
 	}
 	
 	/**
@@ -134,10 +265,22 @@ public abstract class PathPart
 			{
 				if(point != null)
 				{
-					g.fillOval(point.x - 6, point.y - 6, 12, 12);
+					fillPoint(g, point);
 				}
 			}
 		}
+	}
+	
+	/**
+	 * Helper method that fills a point.
+	 * @param g
+	 * 	The graphics object to be used
+	 * @param p
+	 * 	The point to be drawn
+	 */
+	protected void fillPoint(Graphics g, Point p)
+	{
+		g.fillOval(p.x - 6, p.y - 6, 12, 12);
 	}
 	
 	/**
@@ -150,8 +293,7 @@ public abstract class PathPart
 	protected abstract void drawFinished(Graphics g, Point[] p);
 	
 	/**
-	 * Moves the robot along the specified path using 
-	 * all the needed points.
+	 * Describes what the robot will do during this path part.
 	 */
-	public abstract void drivePath();
+	public abstract String describePath();
 }

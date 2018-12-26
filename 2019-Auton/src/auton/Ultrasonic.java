@@ -22,7 +22,7 @@ public class Ultrasonic extends PathPart
 	 */
 	public Ultrasonic(Point start) 
 	{
-		super(3, Color.cyan);
+		super(3, Color.cyan, 0, 1);
 		addPoint(start);
 	}
 
@@ -32,6 +32,7 @@ public class Ultrasonic extends PathPart
 		g.drawLine(p[0].x, p[0].y, p[1].x, p[1].y);	
 		g.fillOval(p[2].x - 6, p[2].y - 6, 12, 12);
 		
+		//Draw perpendicular line as the object the ultrasonic will detect
 //		Perpendicular vector
 //		i1 j1 known
 //		i1 * i2 + j1 * j2 = 0
@@ -69,16 +70,10 @@ public class Ultrasonic extends PathPart
 	}
 
 	@Override
-	public void drivePath() 
+	public String describePath() 
 	{
 		double distance = MathSupport.getDistance(getPoints()[1], getPoints()[2]);
 		distance *= DrawPath.INCHPIXEL;
-		System.out.println("Driving to " + distance + "in away from object");
-	}
-	
-	@Override
-	public Point getLastPoint()
-	{
-		return getPoints()[1];
+		return "Driving to " + distance + "in away from object";
 	}
 }

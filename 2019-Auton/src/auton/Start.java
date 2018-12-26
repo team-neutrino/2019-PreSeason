@@ -25,9 +25,9 @@ public class Start extends PathPart
 	}
 
 	@Override
-	public void drivePath() 
+	public String describePath() 
 	{
-		System.out.println("Start");	
+		return "Start";	
 	}
 
 	@Override

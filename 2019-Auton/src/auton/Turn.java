@@ -24,13 +24,7 @@ public class Turn extends PathPart
 	 */
 	public Turn(Point start, Point center) 
 	{
-		super(3, Color.yellow);
-		
-		if(start == null || center == null)
-		{
-			throw new NullPointerException();
-		}
-		
+		super(3, Color.yellow, 1, 1);		
 		addPoint(start);
 		addPoint(center);
 	}
@@ -38,20 +32,16 @@ public class Turn extends PathPart
 	@Override
 	protected void drawFinished(Graphics g, Point[] p) 
 	{
-		g.fillOval(p[1].x - 6, p[1].y - 6, 12, 12);
-		g.drawArc(p[1].x, p[1].y, 20, 20, 0, (int) MathSupport.getAngleDegree(p[0], p[1], p[2]));
+		fillPoint(g, p[1]);
+		g.drawArc(p[1].x - 25, p[1].y - 25, 50, 50, (int) 
+				MathSupport.getImageAngle(p[1], p[2]), 
+				(int) MathSupport.getAngleDegree(p[0], p[1], p[2]));
 	}
 
 	@Override
-	public void drivePath() 
+	public String describePath() 
 	{
 		Point[] p = getPoints();
-		System.out.println("Turning " + MathSupport.getAngleDegree(p[0], p[1], p[2]) + " degrees");
-	}
-
-	@Override
-	public Point getLastPoint()
-	{
-		return getPoints()[1];
+		return "Turning " + MathSupport.getAngleDegree(p[0], p[1], p[2]) + " degrees";
 	}
 }

@@ -19,8 +19,9 @@ public class Spline extends PathPart
 		g.setColor(Color.orange);
 		if(searchingForPoints())
 		{
-			g.fillOval(p[0].x - 6, p[0].y - 6, 12, 12);
+			fillPoint(g, p[0]);
 			
+			//Draws circle instead of just a point
 			if(p[1] != null)
 			{
 				double x = Math.abs(p[1].getX() - p[0].getX());
@@ -47,9 +48,8 @@ public class Spline extends PathPart
 	}
 
 	@Override
-	public void drivePath() 
+	public String describePath() 
 	{
-		// TODO Auto-generated method stub
-
+		return "Driving Spline";
 	}
 }

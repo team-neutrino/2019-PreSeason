@@ -23,12 +23,6 @@ public class Line extends PathPart
 	public Line(Point p) 
 	{
 		super(2, Color.blue);
-
-		if(p == null) //Will not allow line to be created without a point
-		{
-			throw new NullPointerException();
-		}
-		
 		addPoint(p);
 	}
 	
@@ -48,12 +42,12 @@ public class Line extends PathPart
 	}
 
 	@Override
-	public void drivePath() 
+	public String describePath() 
 	{
 		Point[] p = getPoints();
 		double distance = MathSupport.getDistance(p[0], p[1]) * DrawPath.INCHPIXEL;
 		
-		System.out.println("Driving forward " + distance + "in");
+		return "Driving forward " + distance + "in";
 	}
 
 	@Override
