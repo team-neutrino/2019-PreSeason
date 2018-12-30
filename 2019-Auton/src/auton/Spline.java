@@ -52,4 +52,10 @@ public class Spline extends PathPart
 	{
 		return "Driving Spline";
 	}
+
+	@Override
+	public void drivePath() {
+		// TODO Auto-generated method stub
+		
+	}
 }

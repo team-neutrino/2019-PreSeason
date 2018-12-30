@@ -55,4 +55,10 @@ public class Line extends PathPart
 	{
 		g.drawLine(p[0].x, p[0].y, p[1].x, p[1].y);
 	}
+
+	@Override
+	public void drivePath() {
+		// TODO Auto-generated method stub
+		
+	}
 }

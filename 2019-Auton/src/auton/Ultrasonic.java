@@ -76,4 +76,10 @@ public class Ultrasonic extends PathPart
 		distance *= DrawPath.INCHPIXEL;
 		return "Driving to " + distance + "in away from object";
 	}
+
+	@Override
+	public void drivePath() {
+		// TODO Auto-generated method stub
+		
+	}
 }

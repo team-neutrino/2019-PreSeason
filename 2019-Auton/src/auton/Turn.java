@@ -44,4 +44,10 @@ public class Turn extends PathPart
 		Point[] p = getPoints();
 		return "Turning " + MathSupport.getAngleDegree(p[0], p[1], p[2]) + " degrees";
 	}
+
+	@Override
+	public void drivePath() {
+		// TODO Auto-generated method stub
+		
+	}
 }

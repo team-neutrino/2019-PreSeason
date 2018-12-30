@@ -296,4 +296,9 @@ public abstract class PathPart
 	 * Describes what the robot will do during this path part.
 	 */
 	public abstract String describePath();
+	
+	/**
+	 * Will return or do the path in a way we decide in meeting.
+	 */
+	public abstract void drivePath();
 }

@@ -35,4 +35,10 @@ public class Start extends PathPart
 	{
 		g.fillOval(p[0].x - 6, p[0].y - 6, 12, 12);
 	}
+
+	@Override
+	public void drivePath() {
+		// TODO Auto-generated method stub
+		
+	}
 }
