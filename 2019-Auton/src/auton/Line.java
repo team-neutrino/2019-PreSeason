@@ -57,7 +57,8 @@ public class Line extends PathPart
 	}
 
 	@Override
-	public void drivePath() {
+	public void drivePath() 
+	{
 		// TODO Auto-generated method stub
 		
 	}

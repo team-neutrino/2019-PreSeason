@@ -298,7 +298,7 @@ public abstract class PathPart
 	public abstract String describePath();
 	
 	/**
-	 * Will return or do the path in a way we decide in meeting.
+	 * Will return or do the path movement in a way we decide in future meeting.
 	 */
 	public abstract void drivePath();
 }
