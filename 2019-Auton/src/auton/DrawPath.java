@@ -19,10 +19,8 @@ import java.util.Scanner;
 import javax.imageio.ImageIO;
 import javax.swing.JButton;
 import javax.swing.JComponent;
-import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
-import javax.swing.filechooser.FileNameExtensionFilter;
 
 /**
  * The class that will be used to create a path for autonomous. A user will be able
