@@ -14,6 +14,11 @@ import java.awt.Point;
  */
 public class Ultrasonic extends PathPart
 {
+	public Ultrasonic() 
+	{
+		super(3, Color.cyan, 0, 1);
+	}
+	
 	/**
 	 * Constructor for the ultrasonic path part using the point where the 
 	 * robot begins.
@@ -79,6 +84,13 @@ public class Ultrasonic extends PathPart
 
 	@Override
 	public void drivePath() 
+	{
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	protected void sanityCheck() 
 	{
 		// TODO Auto-generated method stub
 		

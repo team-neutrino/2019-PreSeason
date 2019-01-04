@@ -13,6 +13,11 @@ import java.awt.Point;
  */
 public class Start extends PathPart
 {
+	public Start() 
+	{
+		super(1, Color.green);
+	}
+	
 	/**
 	 * Constructor for the start which is a single point.
 	 * @param point
@@ -39,7 +44,12 @@ public class Start extends PathPart
 	@Override
 	public void drivePath() 
 	{
-		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	protected void sanityCheck() 
+	{
 		
 	}
 }

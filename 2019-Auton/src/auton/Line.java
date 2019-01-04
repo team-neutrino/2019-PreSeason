@@ -13,7 +13,11 @@ import java.awt.Point;
  */
 public class Line extends PathPart
 {
-
+	public Line() 
+	{
+		super(2, Color.blue);
+	}
+	
 	/**
 	 * Constructor for a line that takes the last point from the previous 
 	 * path part that will be used as the starting point for the line.
@@ -43,11 +47,8 @@ public class Line extends PathPart
 
 	@Override
 	public String describePath() 
-	{
-		Point[] p = getPoints();
-		double distance = MathSupport.getDistance(p[0], p[1]) * DrawPath.INCHPIXEL;
-		
-		return "Driving forward " + distance + "in";
+	{		
+		return "Driving forward " + getDistance() + "in";
 	}
 
 	@Override
@@ -61,5 +62,21 @@ public class Line extends PathPart
 	{
 		// TODO Auto-generated method stub
 		
+	}
+
+	@Override
+	protected void sanityCheck() 
+	{
+		if(getDistance() == 0 || getDistance() > 300) //TODO Make max driving distance a constant
+		{
+			throw new IllegalArgumentException("Line distance cannot be " + getDistance());
+		}
+	}
+	
+	private int getDistance()
+	{
+		Point[] p = getPoints();
+		
+		return (int) Math.round(p[0].distance(p[1]) * DrawPath.INCHPIXEL);
 	}
 }

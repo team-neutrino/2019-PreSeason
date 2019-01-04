@@ -6,7 +6,12 @@ import java.awt.Point;
 
 public class Spline extends PathPart 
 {
-	protected Spline(Point splineStart) 
+	public Spline() 
+	{
+		super(3, Color.ORANGE);
+	}
+	
+	public Spline(Point splineStart) 
 	{
 		super(3, Color.ORANGE);
 		addPoint(splineStart);
@@ -56,6 +61,12 @@ public class Spline extends PathPart
 	@Override
 	public void drivePath() 
 	{
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	protected void sanityCheck() {
 		// TODO Auto-generated method stub
 		
 	}

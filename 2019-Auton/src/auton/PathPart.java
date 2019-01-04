@@ -3,6 +3,7 @@ package auton;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Point;
+import java.io.PrintWriter;
 
 /**
  * Abstract class that will be used to create different kinds of path parts.
@@ -71,6 +72,20 @@ public abstract class PathPart
 		this.color = color;
 		this.startConnection = startConnection;
 		this.endConnection = endConnection;
+	}
+	
+	public void export(PrintWriter out)
+	{
+		sanityCheck();
+		
+		out.print(this.getClass().getSimpleName());
+		
+		for(int arrPos = 0; arrPos < points.length; arrPos++)
+		{
+			out.print(" " + points[arrPos].x + " " + points[arrPos].y);
+		}
+		
+		out.println();
 	}
 	
 	/**
@@ -301,4 +316,6 @@ public abstract class PathPart
 	 * Will return or do the path movement in a way we decide in future meeting.
 	 */
 	public abstract void drivePath();
+	
+	protected abstract void sanityCheck();
 }
