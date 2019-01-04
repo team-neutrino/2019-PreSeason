@@ -27,7 +27,7 @@ public class MathSupport
 	 * @return
 	 * 	The angle, in degrees, between the lines created by the points
 	 */
-	public static double getAngleDegree(Point start, Point center, Point end)
+	public static int getAngleDegree(Point start, Point center, Point end)
 	{
 		/*
 		 * Angel between 2 vectors u and v: arccos((|u| dot |v|) / (magnitude u * magnitude v))
@@ -72,7 +72,7 @@ public class MathSupport
 			degrees *= -1;
 		}
 		
-		return degrees;
+		return (int) Math.round(degrees);
 	}
 	
 	/**

@@ -12,6 +12,11 @@ import java.awt.Point;
  */
 public class End extends PathPart
 {
+	public End()
+	{
+		super(1, Color.red);
+	}
+	
 	/**
 	 * Constructor for the end that uses the last point on path to draw red dot.
 	 * @param end
@@ -38,7 +43,12 @@ public class End extends PathPart
 	@Override
 	public void drivePath() 
 	{
-		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	protected void sanityCheck() 
+	{
 		
 	}
 }

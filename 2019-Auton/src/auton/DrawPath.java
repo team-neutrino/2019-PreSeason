@@ -10,15 +10,19 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Scanner;
 
 import javax.imageio.ImageIO;
 import javax.swing.JButton;
 import javax.swing.JComponent;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 /**
  * The class that will be used to create a path for autonomous. A user will be able
@@ -39,7 +43,7 @@ public class DrawPath extends JComponent implements MouseListener, ActionListene
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-
+	
 	/**
 	 * The window that will display all buttons and graphics
 	 */
@@ -75,20 +79,58 @@ public class DrawPath extends JComponent implements MouseListener, ActionListene
 	}
 	
 	/**
-	 * Constructor that uses given path parts to create the start of a path.
-	 * @param parts
-	 * 	The path parts that will be used to begin the path
+	 * Reads from a file to create a path from an already created path.
+	 * @param file
 	 */
-	public DrawPath(PathPart[] parts)
+	public DrawPath(File file)
 	{
 		setUp();
 		
-		for(PathPart p : parts)
+		try 
 		{
-			path.add(p);
+			Scanner scan = new Scanner(file);
+			
+			while(scan.hasNext())
+			{
+				switch(scan.next())
+				{
+					case "Start" :
+						path.add(new Start());
+						break;
+					case "Line" :
+						path.add(new Line());
+						break;
+						
+					case "Turn" :
+						path.add(new Turn());
+						break;
+						
+					case "Spline" :
+						path.add(new Spline());
+						break;
+						
+					case "Ultrasonic" :
+						path.add(new Ultrasonic());
+						break;
+				}
+				
+				while(scan.hasNextInt())
+				{
+					path.get(path.size() - 1).addPoint(new Point(scan.nextInt(), scan.nextInt()));
+				}
+			}
+			
+			addAt = path.size();
+			scan.close();
+		} 
+		catch (FileNotFoundException e) 
+		{
+			e.printStackTrace();
 		}
+		
+		repaint();
 	}
-
+	
 	/**
 	 * Initializes all the needed components to make the graphics and path.
 	 */
@@ -122,6 +164,7 @@ public class DrawPath extends JComponent implements MouseListener, ActionListene
 		buttons = new JButton[]
 				{
 					new JButton("Finished"),
+					new JButton("Export"),
 					new JButton("Undo"),
 					new JButton("Remove"),
 					new JButton("Line"),
@@ -139,6 +182,12 @@ public class DrawPath extends JComponent implements MouseListener, ActionListene
 		//command it sends when pushed and adding it to the window.
 		for(JButton button : buttons)
 		{
+			if(button.getText().equals("Line"))
+			{
+				y += height;
+				x = 0;
+			}
+			
 			button.addActionListener(this);
 			button.setActionCommand(button.getName());
 			window.add(button);
@@ -192,9 +241,33 @@ public class DrawPath extends JComponent implements MouseListener, ActionListene
 	 * 
 	 * Discuss use in later meetings
 	 */
-	public void getPath()
+	public void getPath(String name)
 	{
-		//TODO write file/system print/decide later
+		try 
+		{
+			if(path.get(path.size() - 1).getClass().equals(End.class))
+			{
+				throw new IllegalArgumentException("You must finish the path to export.");
+			}
+			
+			PrintWriter out = new PrintWriter(name.replace(" ", "") + ".txt");
+			for(PathPart part : path)
+			{
+				part.export(out);
+			}
+
+			out.close();
+		} 
+		catch (FileNotFoundException e) 
+		{
+			e.printStackTrace();
+		}
+		catch(IllegalArgumentException e)
+		{
+			JOptionPane.showMessageDialog(window, 
+					e.getMessage() + "\nRemove or edit the path part.", 
+					"Failed Sanity Check", JOptionPane.ERROR_MESSAGE);
+		}
 	}
 	
 	/**
@@ -249,6 +322,8 @@ public class DrawPath extends JComponent implements MouseListener, ActionListene
 							addAt++;
 						}
 						
+						buttons[0].setActionCommand("Edit");
+						buttons[0].setText("Edit");
 						break;
 						
 					case "Undo" :
@@ -377,7 +452,22 @@ public class DrawPath extends JComponent implements MouseListener, ActionListene
 						break;
 				}
 			}
-			
+			else if(e.getActionCommand().equals("Edit"))
+			{
+				path.remove(path.size() - 1);
+				addAt--;
+				buttons[0].setText("Finished");
+				buttons[0].setActionCommand("Finished");
+			}
+			else if(e.getActionCommand().equals("Export"))
+			{
+				String fileName = JOptionPane.showInputDialog("Type in file name to be exported to.");
+				
+				if(fileName != null)
+				{
+					getPath(fileName.replace(" ", ""));
+				}
+			}
 		}
 		catch(IndexOutOfBoundsException ex)
 		{

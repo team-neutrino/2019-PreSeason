@@ -14,6 +14,11 @@ import java.awt.Point;
  */
 public class Turn extends PathPart 
 {
+	public Turn() 
+	{
+		super(3, Color.yellow, 1, 1);		
+	}
+	
 	/**
 	 * Constructor for a turn using the start and end point from the previous line.
 	 * @param start
@@ -41,8 +46,7 @@ public class Turn extends PathPart
 	@Override
 	public String describePath() 
 	{
-		Point[] p = getPoints();
-		return "Turning " + MathSupport.getAngleDegree(p[0], p[1], p[2]) + " degrees";
+		return "Turning " + getAngle() + " degrees";
 	}
 
 	@Override
@@ -50,5 +54,20 @@ public class Turn extends PathPart
 	{
 		// TODO Auto-generated method stub
 		
+	}
+
+	@Override
+	protected void sanityCheck() 
+	{
+		if(Math.abs(getAngle()) > 180 || getAngle() == 0)
+		{
+			throw new IllegalArgumentException("Angle cannot be " + getAngle());
+		}
+	}
+	
+	private int getAngle()
+	{
+		Point[] p = getPoints();
+		return MathSupport.getAngleDegree(p[0], p[1], p[2]);
 	}
 }
