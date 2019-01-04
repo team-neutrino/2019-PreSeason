@@ -74,6 +74,13 @@ public abstract class PathPart
 		this.endConnection = endConnection;
 	}
 	
+	/**
+	 * Writes to file on new line in the format
+	 * ClassName p1x p1y p2x p2y... 
+	 * with as many points as needed
+	 * @param out
+	 * 	The PrintWriter that will be used to write to file
+	 */
 	public void export(PrintWriter out)
 	{
 		sanityCheck();
@@ -317,5 +324,9 @@ public abstract class PathPart
 	 */
 	public abstract void drivePath();
 	
+	/**
+	 * Throws IllegalArgumentException if the path part has improper
+	 * data such as movement values of 0.
+	 */
 	protected abstract void sanityCheck();
 }

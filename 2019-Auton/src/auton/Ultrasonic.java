@@ -14,6 +14,9 @@ import java.awt.Point;
  */
 public class Ultrasonic extends PathPart
 {
+	/**
+	 * Constructor with no points intended for reading from file.
+	 */
 	public Ultrasonic() 
 	{
 		super(3, Color.cyan, 0, 1);
@@ -77,9 +80,7 @@ public class Ultrasonic extends PathPart
 	@Override
 	public String describePath() 
 	{
-		double distance = MathSupport.getDistance(getPoints()[1], getPoints()[2]);
-		distance *= DrawPath.INCHPIXEL;
-		return "Driving to " + distance + "in away from object";
+		return "Driving to " + distanceTo() + "in away from object";
 	}
 
 	@Override
@@ -92,7 +93,20 @@ public class Ultrasonic extends PathPart
 	@Override
 	protected void sanityCheck() 
 	{
-		// TODO Auto-generated method stub
+		if(distanceTo() < 12 || distanceTo() > 195)//TODO Constant min and max sensor range
+		{
+			throw new IllegalArgumentException("Distance to object cannot be " + distanceTo());
+		}
 		
+	}
+	
+	/**
+	 * Returns the distance to the targeted object.
+	 * @return
+	 * 	The distance away from the object to be driven to
+	 */
+	private int distanceTo()
+	{
+		return (int) Math.round((getPoints()[1].distance(getPoints()[2]) * DrawPath.INCHPIXEL));
 	}
 }

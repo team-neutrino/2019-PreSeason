@@ -13,6 +13,9 @@ import java.awt.Point;
  */
 public class Line extends PathPart
 {
+	/**
+	 * Constructor with no points intended for reading from file.
+	 */
 	public Line() 
 	{
 		super(2, Color.blue);
@@ -73,6 +76,11 @@ public class Line extends PathPart
 		}
 	}
 	
+	/**
+	 * Returns the distance to be driven.
+	 * @return
+	 * 	The distance in inches that will be driven
+	 */
 	private int getDistance()
 	{
 		Point[] p = getPoints();

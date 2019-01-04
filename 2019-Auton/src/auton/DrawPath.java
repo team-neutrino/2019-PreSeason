@@ -79,8 +79,10 @@ public class DrawPath extends JComponent implements MouseListener, ActionListene
 	}
 	
 	/**
-	 * Reads from a file to create a path from an already created path.
+	 * Reads from a file to create a path from an already created path. File must be in format 
+	 * ClassName p1x p1y p2x p2y... with as many points as needed.
 	 * @param file
+	 * 	The file to be read from
 	 */
 	public DrawPath(File file)
 	{
@@ -90,8 +92,10 @@ public class DrawPath extends JComponent implements MouseListener, ActionListene
 		{
 			Scanner scan = new Scanner(file);
 			
+			//Creates path parts from file
 			while(scan.hasNext())
 			{
+				//Decides which path part type will be created
 				switch(scan.next())
 				{
 					case "Start" :
@@ -114,6 +118,7 @@ public class DrawPath extends JComponent implements MouseListener, ActionListene
 						break;
 				}
 				
+				//Adds points until next path part class name is reached
 				while(scan.hasNextInt())
 				{
 					path.get(path.size() - 1).addPoint(new Point(scan.nextInt(), scan.nextInt()));
@@ -237,9 +242,10 @@ public class DrawPath extends JComponent implements MouseListener, ActionListene
 	}
 	
 	/**
-	 * Will return a the path code that could be used to run autonomous.
-	 * 
-	 * Discuss use in later meetings
+	 * Exports path from the given file name. File will be in format 
+	 * ClassName p1x p1y p2x p2y... with as many points as needed.
+	 * @param name
+	 * 	The .txt file name
 	 */
 	public void getPath(String name)
 	{
@@ -247,9 +253,11 @@ public class DrawPath extends JComponent implements MouseListener, ActionListene
 		{
 			if(path.get(path.size() - 1).getClass().equals(End.class))
 			{
+				//Path must have end point to be finished and exported
 				throw new IllegalArgumentException("You must finish the path to export.");
 			}
 			
+			//Writes all info to file
 			PrintWriter out = new PrintWriter(name.replace(" ", "") + ".txt");
 			for(PathPart part : path)
 			{
@@ -461,6 +469,7 @@ public class DrawPath extends JComponent implements MouseListener, ActionListene
 			}
 			else if(e.getActionCommand().equals("Export"))
 			{
+				//Writes data to the given file name in a .txt file
 				String fileName = JOptionPane.showInputDialog("Type in file name to be exported to.");
 				
 				if(fileName != null)

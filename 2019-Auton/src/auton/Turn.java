@@ -14,6 +14,9 @@ import java.awt.Point;
  */
 public class Turn extends PathPart 
 {
+	/**
+	 * Constructor with no points intended for reading from file.
+	 */
 	public Turn() 
 	{
 		super(3, Color.yellow, 1, 1);		
@@ -65,6 +68,11 @@ public class Turn extends PathPart
 		}
 	}
 	
+	/**
+	 * Returns the angle degree that will be turned.
+	 * @return
+	 * 	The angle degree
+	 */
 	private int getAngle()
 	{
 		Point[] p = getPoints();

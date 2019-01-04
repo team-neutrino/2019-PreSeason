@@ -13,6 +13,9 @@ import java.awt.Point;
  */
 public class Start extends PathPart
 {
+	/**
+	 * Constructor with no points intended for reading from file.
+	 */
 	public Start() 
 	{
 		super(1, Color.green);
